@@ -1,0 +1,47 @@
+{
+  "name": "realtime-connection",
+  "productName": "realtime connection with floating window",
+  "description": "realtime connection with floating window",
+  "keywords": [],
+  "main": "./main.js",
+  "version": "1.0.0",
+  "author": "justacomputer",
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
+  },
+  "dependencies": {
+    "ping": "0.4.4"
+  },
+  "devDependencies": {
+    "electron": "30.0.2",
+    "electron-builder": "^25.0.0-alpha.9"
+  },
+  "build": {
+    "appId": "com.anony.realtimeconnection",
+    "productName": "realtime-connection",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "renderer.js",
+      "index.html",
+      "package.json"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "images/icon.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "images/icon.icns"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "images"
+    }
+  }
+}

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ping Graph</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #f5f5f500;
+      -webkit-app-region: drag;
+    }
+    canvas {
+      width: 100vw;
+      height: 100vh;
+      /* background-color: #ffffff54; */
+      /* border: 1px solid #ffffff; */
+      box-shadow:inset 0px 0px 70px 1px rgba(0, 0, 0, 0.6);
+      border-radius: 10px;
+      
+    }
+    .w {
+        position: fixed;
+        top: 0;
+        right: 0;
+        color:blue;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="pingCanvas" ></canvas>
+  <!-- <p class="w" id="text">waiting...</p> -->
+  <script src="renderer.js"></script>
+</body>
+</html>
