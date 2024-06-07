@@ -1,19 +1,35 @@
 const canvas = document.getElementById('pingCanvas');
 const ctx = canvas.getContext('2d');
-const { ipcRenderer } = require('electron');
-const interval = 100;
-let pingData = [];
+const { ipcRenderer } = require('electron')
+
+let sysColor = "";
+let pingData = [0];
+let maxping = 2000;
+var lastpl = new Date().getTime();
+function isFloat(n) {
+  return n === +n && n !== (n|0);
+}
+
+ipcRenderer.on('set-value', (event, [c, m]) => {
+  sysColor = '#' + c.slice(0,-2);
+  maxping = m;
+});
+console.log(sysColor)
+var ping = 0;
 ipcRenderer.on('ping', (event, data) => {
   if (data.alive){
-    pingData.push(data.time);
+    ping = data.time;
+  }else if(data.pl === '100.000'){
+    ping += maxping;
   }else{
-    pingData.push(pingData[pingData.length-1] + interval);
+    ping += new Date().getTime() - lastpl;
   }
-    // document.getElementById("text").textContent = data.time || 0;
-    if (pingData.length > 100) pingData.shift();  // Keep last 100 pings
-    drawGraph();
+  lastpl = new Date().getTime();
+  pingData.push(ping);
+  // document.getElementById("text").textContent = ping;
+  if (pingData.length > 100) pingData.shift();  // Keep last 100 pings
+  drawGraph();
 });
-
 
 function drawGraph() {
   canvas.width = canvas.clientWidth;
@@ -24,7 +40,6 @@ function drawGraph() {
   const minPingScale = 50; 
   const maxPing = Math.max(Math.max(...pingData), minPingScale) * 1.2;
   let step = Math.ceil(maxPing / canvas.height * 4) * 10  ;  
-  console.log(step)
 
   const numSteps = Math.ceil(maxPing / step);
 
@@ -45,14 +60,14 @@ function drawGraph() {
 
   // Draw ping data
   ctx.beginPath();
-  ctx.moveTo(0, canvas.height);
+  ctx.moveTo(-2, canvas.height);
   for (let i = 0; i < pingData.length; i++) {
     const x = (i / (pingData.length - 1)) * canvas.width;
     const y = canvas.height - (pingData[i] / (numSteps * step)) * canvas.height;
     ctx.lineTo(x, y);
   }
 
-  ctx.strokeStyle = 'blue';
+  ctx.strokeStyle = sysColor;
   ctx.lineWidth = 2;
   ctx.stroke();
 }
